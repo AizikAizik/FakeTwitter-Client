@@ -3,37 +3,34 @@ import {
   InMemoryCache,
   ApolloClient,
   ApolloProvider,
-  HttpLink
+  HttpLink,
 } from '@apollo/client';
 import './App.css';
 import Users from './components/Users';
-import {
-  BrowserRouter as Router,
-  Switch,
-  Route
-} from 'react-router-dom';
+import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import Landing from './components/Landing';
-import {setContext} from 'apollo-link-context';
+import { setContext } from 'apollo-link-context';
 import SignUp from './pages/SignUp';
 import Login from './pages/Login';
+import IsAuthenticated from './components/IsAuthenticated';
 
-const httplink = new HttpLink({uri: 'http://localhost:4000'});
-const authlink = setContext(async (req, {headers}) =>{
+const httplink = new HttpLink({ uri: 'http://localhost:4000' });
+const authlink = setContext(async (req, { headers }) => {
   const token = localStorage.getItem('token');
 
-  return{
+  return {
     ...headers,
-    headers:{
-      Authorization: token ? `Bearer ${token}` : null
-    }
-  }
-})
+    headers: {
+      Authorization: token ? `Bearer ${token}` : null,
+    },
+  };
+});
 const link = authlink.concat(httplink as any);
 
 const client = new ApolloClient({
-  link: (link as any),
-  cache: new InMemoryCache()
-})
+  link: link as any,
+  cache: new InMemoryCache(),
+});
 
 function App() {
   return (
@@ -41,9 +38,6 @@ function App() {
       <Router>
         <Switch>
           <Route path='/' exact>
-            <Users />
-          </Route>
-          <Route path='/users'>
             <Users />
           </Route>
           <Route path='/landing'>
@@ -55,10 +49,14 @@ function App() {
           <Route path='/login'>
             <Login />
           </Route>
+          <IsAuthenticated>
+            <Route path='/users'>
+              <Users />
+            </Route>
+          </IsAuthenticated>
         </Switch>
       </Router>
     </ApolloProvider>
-    
   );
 }
 
