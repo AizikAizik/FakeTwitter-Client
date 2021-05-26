@@ -2,36 +2,35 @@ import React from 'react';
 import { Formik, Field, Form, ErrorMessage } from 'formik';
 import * as yup from 'yup';
 import { gql, useMutation } from '@apollo/client';
-import { useHistory } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
+import TwitterLogo from '../styles/assets/twitter-logo.png';
 
 const LOGIN_MUTATION = gql`
-    mutation login($email: String!, $password: String!){
-        login(email: $email, password: $password){
-            token,
-            user{
-                id,
-                name
-            }
-        }
+  mutation login($email: String!, $password: String!) {
+    login(email: $email, password: $password) {
+      token
+      user {
+        id
+        name
+      }
     }
-`
+  }
+`;
 
 interface SignInValues {
-    email: string,
-    password: string
+  email: string;
+  password: string;
 }
 
 const initialValues: SignInValues = {
-    email: '',
-    password: ''
-}
+  email: '',
+  password: '',
+};
 
 const validationSchema = yup.object({
   email: yup.string().email('Invalid Email').required('Email is Required'),
 
-  password: yup
-    .string()
-    .required('password is required'),
+  password: yup.string().required('password is required'),
 });
 
 export default function Login() {
@@ -39,7 +38,13 @@ export default function Login() {
   const [login, { data }] = useMutation(LOGIN_MUTATION);
   return (
     <div>
-      <h2>Login To Twitter</h2>
+      <img
+        src={TwitterLogo}
+        alt='logo'
+        style={{ width: '50px' }}
+        className='logo'
+      />
+      <h3>Login To Twitter</h3>
       <Formik
         initialValues={initialValues}
         validationSchema={validationSchema}
@@ -57,14 +62,21 @@ export default function Login() {
       >
         <Form>
           <Field name='email' type='email' placeholder='email' />
-          <ErrorMessage name='email' component={'div'} />
+          <ErrorMessage name='email' component={'p'} />
 
           <Field name='password' type='password' placeholder='password' />
-          <ErrorMessage name='password' component={'div'} />
+          <ErrorMessage name='password' component={'p'} />
 
-          <button type='submit'>Login</button>
+          <button type='submit' className='login-btn'>
+            <span>Login</span>
+          </button>
         </Form>
       </Formik>
+
+      <div className='register'>
+        <h4>Don't have an account?</h4>
+        <Link to='/signup'>Sign up</Link>
+      </div>
     </div>
   );
 }

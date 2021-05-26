@@ -1,6 +1,6 @@
 import React from 'react';
 import { gql, useQuery } from '@apollo/client';
-import { Redirect } from 'react-router';
+import { Redirect } from 'react-router-dom';
 
 const IS_AUTH = gql`
     {
