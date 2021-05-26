@@ -1,8 +1,8 @@
-import React from "react";
-import { Formik, Field, Form, ErrorMessage } from "formik";
-import * as yup from "yup";
-import { gql, useMutation } from "@apollo/client";
-import { useHistory } from "react-router-dom";
+import React from 'react';
+import { Formik, Field, Form, ErrorMessage } from 'formik';
+import * as yup from 'yup';
+import { gql, useMutation } from '@apollo/client';
+import { useHistory } from 'react-router-dom';
 
 const SIGNUP_MUTATION = gql`
   mutation signup($name: String, $email: String!, $password: String!) {
@@ -20,19 +20,22 @@ interface SignupValues {
 }
 
 const initialValues: SignupValues = {
-  name: "",
-  email: "",
-  password: "",
-  confirmPassword: "",
+  name: '',
+  email: '',
+  password: '',
+  confirmPassword: '',
 };
 
 const validationSchema = yup.object({
-  email: yup.string().email("Invalid Email").required("Email is Required"),
-  name: yup.string().max(15, "max limit is 15"),
+  email: yup.string().email('Invalid Email').required('Email is Required'),
+  name: yup.string().max(15, 'max limit is 15').required('name is Required'),
   password: yup
     .string()
-    .max(20, "Must be 20 characters or less")
-    .required("password is required"),
+    .max(15, 'Must be 20 characters or less')
+    .required('password is required'),
+  confirmPassword: yup
+    .string()
+    .oneOf([yup.ref('password')], 'Passwords must match'),
 });
 
 // const submitHandler = async (value, {setSubmitting}) =>{}
@@ -52,29 +55,29 @@ export default function SignUp() {
             variables: values,
           });
 
-          localStorage.setItem("token", response.data.signup.token);
+          localStorage.setItem('token', response.data.signup.token);
           setSubmitting(false);
-          history.push("/users");
+          history.push('/users');
         }}
       >
         <Form>
-          <Field name="name" type="text" placeholder="full name" />
-          <ErrorMessage name="name" component={"div"} />
+          <Field name='name' type='text' placeholder='full name' />
+          <ErrorMessage name='name' component={'div'} />
 
-          <Field name="email" type="email" placeholder="email" />
-          <ErrorMessage name="email" component={"div"} />
+          <Field name='email' type='email' placeholder='email' />
+          <ErrorMessage name='email' component={'div'} />
 
-          <Field name="passowrd" type="password" placeholder="password" />
-          <ErrorMessage name="password" component={"div"} />
+          <Field name='password' type='password' placeholder='password' />
+          <ErrorMessage name='password' component={'div'} />
 
           <Field
-            name="confirmPassword"
-            type="password"
-            placeholder="confirm password"
+            name='confirmPassword'
+            type='password'
+            placeholder='confirm password'
           />
-          <ErrorMessage name="confirmPassword" component={"div"} />
+          <ErrorMessage name='confirmPassword' component={'div'} />
 
-          <button type="submit">Sign up</button>
+          <button type='submit'>Sign up</button>
         </Form>
       </Formik>
     </div>
