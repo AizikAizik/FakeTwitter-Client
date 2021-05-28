@@ -37,7 +37,7 @@ export default function Login() {
   const history = useHistory();
   const [login, { data }] = useMutation(LOGIN_MUTATION);
   return (
-    <div>
+    <div className='container'>
       <img
         src={TwitterLogo}
         alt='logo'

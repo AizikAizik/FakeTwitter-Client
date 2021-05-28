@@ -45,14 +45,14 @@ export default function SignUp() {
   const history = useHistory();
   const [signup, { data }] = useMutation(SIGNUP_MUTATION);
   return (
-    <div>
+    <div className='container'>
       <img
         src={TwitterLogo}
         alt='logo'
         style={{ width: '50px' }}
         className='logo'
       />
-      <h3>Signup</h3>
+      <h3>Sign Up To Twitter</h3>
       <Formik
         initialValues={initialValues}
         validationSchema={validationSchema}
